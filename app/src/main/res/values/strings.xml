@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageAreaPercentage</string>
+    <string name="selectText">Select an image:</string>
+    <string name="buttonSelectImg">Select</string>
+    <string name="textBoxImgName">...</string>
+    <string name="buttonOpenImg">Open</string>
+</resources>
