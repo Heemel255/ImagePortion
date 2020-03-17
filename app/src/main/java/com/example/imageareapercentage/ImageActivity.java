@@ -28,13 +28,12 @@ public class ImageActivity extends AppCompatActivity {
     ImageView imgView;
     TextView textViewImgname;
 
+    Matrix matrix1;
+    Matrix matrix2;
     int initialX;
     int initialY;
     int releaseX;
     int releaseY;
-
-    Matrix matrix1;
-    Matrix matrix2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,28 +71,22 @@ public class ImageActivity extends AppCompatActivity {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
 
                     //get initial x and y pressed
-                    float[] points1 = {event.getX(),event.getY()};
+                    float[] points1 = {event.getX(), event.getY()};
                     matrix1.mapPoints(points1);
 
                     initialX = (int) points1[0];
                     initialY = (int) points1[1];
+                }
+                else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
-
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                    //get x and y pressed after release
-                    float[] points2 = {event.getX(),event.getY()};
+                    float[] points2 = {event.getX(), event.getY()};
                     matrix2.mapPoints(points2);
 
                     releaseX = (int) points2[0];
                     releaseY = (int) points2[1];
 
-                    if(initialY > bid.getBmp().getHeight() || releaseY > bid.getBmp().getHeight()) {
-
-                        textViewImgname.setText("Touch went out of picture bounds.");
-                    }
-                    else {
-
+                    //checks to see if it went out of bounds
+                    if(!(initialY > bid.getBmp().getHeight() || releaseY > bid.getBmp().getHeight())) {
 
                         bid.drawRectToImg(initialX, initialY, releaseX, releaseY);
                         imgView.setImageBitmap(bid.getBmp());
