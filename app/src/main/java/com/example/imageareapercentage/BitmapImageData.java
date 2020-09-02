@@ -26,40 +26,40 @@ public class BitmapImageData {
 
     public BitmapImageData(Bitmap b) {
 
-        this.originalImg = b;
+        originalImg = b;
 
-        this.initCanvas();
+        initCanvas();
     }
 
     private void initCanvas() {
 
-        this.img = Bitmap.createBitmap(originalImg.getWidth(), originalImg.getHeight(), Bitmap.Config.RGB_565);
-        this.canvas = new Canvas(img);
+        img = Bitmap.createBitmap(originalImg.getWidth(), originalImg.getHeight(), Bitmap.Config.RGB_565);
+        canvas = new Canvas(img);
 
-        this.bmpPaint = new Paint();
-        this.bmpPaint.setAntiAlias(true);
-        this.bmpPaint.setFilterBitmap(true);
-        this.bmpPaint.setDither(true);
+        bmpPaint = new Paint();
+        bmpPaint.setAntiAlias(true);
+        bmpPaint.setFilterBitmap(true);
+        bmpPaint.setDither(true);
 
         canvas.drawBitmap(originalImg,0,0, bmpPaint);
 
         //paint settings for rectangle
-        this.mPaint = new Paint();
-        this.mPaint.setAntiAlias(true);
-        this.mPaint.setColor(Color.RED);
-        this.mPaint.setAlpha(100);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(Color.RED);
+        mPaint.setAlpha(100);
 
         //paint settings for text
-        this.sPaint = new Paint();
-        this.sPaint.setAntiAlias(true);
-        this.sPaint.setColor(Color.WHITE);
+        sPaint = new Paint();
+        sPaint.setAntiAlias(true);
+        sPaint.setColor(Color.WHITE);
     }
 
 
 
     public void drawRectToImg(int x1, int y1, int x2, int y2) {
 
-        this.resetCanvas();
+        resetCanvas();
 
         //these conditions check if the user started touching the screen from the right and/or bottom side and dragged opposite
         int left = x1 > x2 ? x2 : x1;
@@ -67,9 +67,10 @@ public class BitmapImageData {
         int top = y1 > y2 ? y2 : y1;
         int bottom =  top == y2 ? y1: y2;
 
-        //calculate the percentage
-        this.calcBoxSize( left, right, top, bottom);
-        String percText = this.getBoxSizePercent() != 0 ? String.valueOf(this.getBoxSizePercent()) + "%" : "<1%";
+        //calculate the percentage, boxSize: width * height of user selected rectangle
+        boxSize = (bottom - top) * (right - left);
+        int p = getBoxSizePercent();
+        String percText = p != 0 ? String.valueOf(p) + "%" : "<1%";
 
         //draw rectangle
         mRect = new Rect(left, top, right, bottom);
@@ -82,17 +83,10 @@ public class BitmapImageData {
         canvas.drawText(percText, (float)xPerc, (float)yPerc, sPaint);
     }
 
-    private void calcBoxSize(int left, int right, int top, int bottom){
-
-        int boxWidth = right - left;
-        int boxHeight = bottom - top;
-        this.boxSize = boxHeight * boxWidth;
-    }
-
     private int getBoxSizePercent() {
 
-        double imgSize = (double)(this.originalImg.getWidth() * this.originalImg.getHeight());
-        double finalSizePercentage = (this.boxSize / imgSize) * 100;
+        double imgSize = (double)(originalImg.getWidth() * originalImg.getHeight());
+        double finalSizePercentage = (boxSize / imgSize) * 100;
         return (int)finalSizePercentage;
     }
 
@@ -103,8 +97,8 @@ public class BitmapImageData {
 
     public Bitmap getBmp() {
 
-        if(this.img != null) {
-            return this.img;
+        if(img != null) {
+            return img;
         }
         else {
             return  null;
