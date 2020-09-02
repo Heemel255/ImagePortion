@@ -20,7 +20,7 @@ import java.io.FileDescriptor;
 
 public class ImageActivity extends AppCompatActivity {
 
-    BitmapImageData bid;
+    BitmapImageData bID;
 
     Uri uri;
     String imgName;
@@ -30,6 +30,7 @@ public class ImageActivity extends AppCompatActivity {
 
     Matrix matrix1;
     Matrix matrix2;
+
     int initialX;
     int initialY;
     int releaseX;
@@ -48,13 +49,13 @@ public class ImageActivity extends AppCompatActivity {
 
         try {
 
-            bid = new BitmapImageData(getBmpData(uri));
+            bID = new BitmapImageData(getBmpData(uri));
         } catch (Exception e) {
 
             e.printStackTrace();
         }
 
-        imgView.setImageBitmap(bid.getBmp());
+        imgView.setImageBitmap(bID.getBmp());
         textViewImgname.setText(imgName);
 
         //matrix classes are needed to get the exact area pressed by user
@@ -70,7 +71,6 @@ public class ImageActivity extends AppCompatActivity {
 
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
 
-                    //get initial x and y pressed
                     float[] points1 = {event.getX(), event.getY()};
                     matrix1.mapPoints(points1);
 
@@ -85,17 +85,25 @@ public class ImageActivity extends AppCompatActivity {
                     releaseX = (int) points2[0];
                     releaseY = (int) points2[1];
 
-                    //checks to see if it went out of bounds
-                    if(!(initialY > bid.getBmp().getHeight() || releaseY > bid.getBmp().getHeight())) {
 
-                        bid.drawRectToImg(initialX, initialY, releaseX, releaseY);
-                        imgView.setImageBitmap(bid.getBmp());
+                    if(inBounds()) {
+
+                        bID.drawRectToImg(initialX, initialY, releaseX, releaseY);
+                        imgView.setImageBitmap(bID.getBmp());
                     }
                 }
 
                 return true;
             }
         });
+    }
+
+    //checks to see if touch went out of the bounds of the image displayed
+    public boolean inBounds() {
+
+        return initialY < bID.getBmp().getHeight() && releaseY < bID.getBmp().getHeight() &&
+                initialX < bID.getBmp().getWidth() && releaseX < bID.getBmp().getWidth() &&
+                initialY >= 0 && releaseY >= 0 && initialX >= 0 && releaseX >= 0;
     }
 
     //this is needed to create the bitmap from the passed uri
