@@ -1,13 +1,11 @@
-package com.example.imageareapercentage;
+package com.project_core.imageareapercentage;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.EditText;

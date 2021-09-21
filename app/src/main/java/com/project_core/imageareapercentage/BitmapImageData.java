@@ -1,12 +1,10 @@
-package com.example.imageareapercentage;
+package com.project_core.imageareapercentage;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
 public class BitmapImageData {
 
@@ -24,9 +22,9 @@ public class BitmapImageData {
     private Paint sPaint;
 
 
-    public BitmapImageData(Bitmap b) {
+    public BitmapImageData(Bitmap bmp) {
 
-        originalImg = b;
+        originalImg = bmp;
 
         initCanvas();
     }
@@ -55,8 +53,7 @@ public class BitmapImageData {
         sPaint.setColor(Color.WHITE);
     }
 
-
-
+    //x1/y1 and x2/y2 are the initial click and final release coordinates
     public void drawRectToImg(int x1, int y1, int x2, int y2) {
 
         resetCanvas();
@@ -76,10 +73,13 @@ public class BitmapImageData {
         mRect = new Rect(left, top, right, bottom);
         canvas.drawRect(mRect, mPaint);
 
-        //draw percentage text
+        //scale percentage text and draw
         int textWidth = (int)sPaint.measureText(percText);
         int xPerc = left + ((((right - left) / 2)) - (textWidth / 2));
         int yPerc = (int)((top + ((bottom - top) /2)) - ((sPaint.descent() + sPaint.ascent()) /2));
+
+        float tSize = (float)(Math.sqrt(boxSize) * 0.5);
+        sPaint.setTextSize(tSize);
         canvas.drawText(percText, (float)xPerc, (float)yPerc, sPaint);
     }
 
